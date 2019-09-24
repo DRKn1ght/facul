@@ -119,10 +119,5 @@ int main ()
             break;
         }
     }
-    inserir(10, head);
-    inserir(20, head);
-    //imprimir(head);
-    inserir_pos(30, 10, head);
-    imprimir(head);
     return 0;
 }
