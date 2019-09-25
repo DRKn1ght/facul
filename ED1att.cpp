@@ -79,7 +79,13 @@ void deletar(int x, lista *p)
     }
     lista *aux = p;
     lista *pe = NULL;
-
+    if (HTemp == head)
+    {
+    	head = HTemp->prox;
+    	HTemp->prox = NULL;
+    	free(HTemp);
+    	return;
+    }else{
     while (aux != NULL)
     {
         if (aux->prox->element == x){
@@ -88,6 +94,7 @@ void deletar(int x, lista *p)
         }
         aux = aux->prox;
     }
+}
     pe->prox = HTemp->prox;
     free(HTemp);
 
