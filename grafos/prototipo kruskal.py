@@ -39,7 +39,7 @@ print("-=-=-=-=")
 print("minimo: ", minimo)
 print("-=-=-=-=")
 print("minimo2: ", minimo2)
-print("top: ", top)
+print("top1: ", top)
 print("top2: ", top2)
 k = 0
 i = 0
