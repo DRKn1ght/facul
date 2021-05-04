@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-@author: Guilherme Panobianco
+
         
 Dados: Será utilizado lista de adjacência para o random Kruskal. MSTKruskal,
 por sua vez, retornará uma lista de adjacência. A matriz não é preenchida completamente,
@@ -344,10 +344,6 @@ def randomTreeKruskal(n):
 def ExtractMin(Q):
     if (Q[0].chave == 0):
         return 0
-    '''if (secMin != float('inf')):
-        secMinAux = secMin.copy()
-        secMin = float('inf')
-        return secMinAux'''
     chaveMin = Q[0].chave
     #secMin = float('inf')
     i = 0
@@ -374,11 +370,11 @@ def MSTPrim(G, s):
         Q.append(v)
     s.chave = 0
     Q[0].chave = 0;
-    print(G.adjMatrix)
+    #print(G.adjMatrix)
     while len(Q) != 0:
         u = Q.pop(ExtractMin(Q))
         for v in Q:
-            print(u.index, v.index, G.adjMatrix[v.index][u.index])
+            #print(u.index, v.index, G.adjMatrix[v.index][u.index])
             if (G.adjMatrix[v.index][u.index] < v.chave):
                 v.pai = G.V[u.index]
                 v.chave = G.adjMatrix[v.index][u.index]
@@ -394,7 +390,7 @@ def MSTPrim(G, s):
 def randomTreePrim(n):
     G = Graph([], [], n, None)
     G.V = [Vertex(i, float('inf'), None, 'branco') for i in range (n)]
-    G.adjMatrix = np.full((n,n), 0.)
+    G.adjMatrix = [[0 for i in range(n)] for j in range(n)]
     
     for u in range(n):
         for v in range(u+1, n):
@@ -408,7 +404,7 @@ def randomTreePrim(n):
         print("Não é árvore")
     return G
 
-randomTreePrim(5)
+#randomTreePrim(5)
 # Gera um arquivo de texto randomwalk.txt para plotar o gráfico com o arquivo
 # plot.py
 def randomWalkAssert():
@@ -458,7 +454,7 @@ def PrimAssert():
     for n in [250, 500, 750, 1000, 1250, 1500, 1750, 2000]:
         start_time2 = time.time()
         soma = 0
-        for i in range(15):
+        for i in range(10):
             G = randomTreePrim(n)
             soma2 = Diameter(G)
             soma += soma2
@@ -471,4 +467,4 @@ def PrimAssert():
     print("Arquivo gerado")
 
 
-#PrimAssert()
+PrimAssert()
