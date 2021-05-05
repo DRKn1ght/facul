@@ -1,0 +1,19 @@
+Gerando arquivo randomwalk.txt
+--- Finalizado em 1.3042304515838623 seconds ---
+250 47.052
+--- Finalizado em 2.7159202098846436 seconds ---
+500 69.104
+--- Finalizado em 4.494464159011841 seconds ---
+750 85.744
+--- Finalizado em 6.239423751831055 seconds ---
+1000 101.256
+--- Finalizado em 8.210209608078003 seconds ---
+1250 111.708
+--- Finalizado em 9.97068738937378 seconds ---
+1500 125.046
+--- Finalizado em 11.56063723564148 seconds ---
+1750 134.464
+--- Finalizado em 13.26557445526123 seconds ---
+2000 142.878
+--- Tempo total: 57.76516008377075 seconds ---
+Arquivo gerado

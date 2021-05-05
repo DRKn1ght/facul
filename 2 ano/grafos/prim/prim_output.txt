@@ -1,0 +1,18 @@
+Gerando arquivo prim.txt
+250 36.486
+--- Finalizado em 12.184503316879272 seconds ---
+500 50.61
+--- Finalizado em 51.34641790390015 seconds ---
+750 59.578
+--- Finalizado em 117.56014823913574 seconds ---
+1000 67.134
+--- Finalizado em 215.8055820465088 seconds ---
+1250 73.226
+--- Finalizado em 344.4293112754822 seconds ---
+1500 78.312
+--- Finalizado em 491.4315814971924 seconds ---
+1750 83.144
+--- Finalizado em 692.9757978916168 seconds ---
+2000 90.156
+--- Finalizado em 988.3649098873138 seconds ---
+--- Tempo total: 2914.1002531051636 seconds ---

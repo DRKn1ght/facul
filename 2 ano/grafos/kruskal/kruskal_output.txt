@@ -1,0 +1,18 @@
+Gerando arquivo kruskal.txt
+250 37.176
+--- Finalizado em 10.519332647323608 seconds ---
+500 50.108
+--- Finalizado em 42.102006912231445 seconds ---
+750 59.114
+--- Finalizado em 91.16993927955627 seconds ---
+1000 67.386
+--- Finalizado em 161.54000234603882 seconds ---
+1250 73.93
+--- Finalizado em 254.18537855148315 seconds ---
+1500 79.474
+--- Finalizado em 358.5312159061432 seconds ---
+1750 84.816
+--- Finalizado em 486.3889272212982 seconds ---
+2000 88.86
+--- Finalizado em 656.616391658783 seconds ---
+--- Tempo total: 2061.0531945228577 seconds ---
