@@ -14,5 +14,5 @@ Gerando arquivo prim.txt
 1750 83.144
 --- Finalizado em 692.9757978916168 seconds ---
 2000 90.156
---- Finalizado em 988.3649098873138 seconds ---
---- Tempo total: 2914.1002531051636 seconds ---
+--- Finalizado em 978.3649098873138 seconds ---
+--- Tempo total: 2904.1002531051636 seconds ---
