@@ -1,6 +1,6 @@
-ld F6, (32)R2
-ld F2, (45)R3
-muld F0, F2, F4
-subd F8, F6, F2
-divd F10, F0, F6
-addd F6, F8, F2
+ld r6, (32)r2
+ld r2, (45)r3
+muld r0, r2, r4
+subd r8, r6, r2
+divd r10, r0, r6
+addd r6, r8, r2

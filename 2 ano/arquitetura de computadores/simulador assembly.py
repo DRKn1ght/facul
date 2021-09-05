@@ -1,34 +1,5 @@
-""""
-Descrição: Deve-se implementar um simulador para uma arquitetura simples. As
-descrições para o hardware são as seguintes:
-• Processador:
-• A arquitetura deverá ter um pipeline de 5 estágios, sendo eles:
-◦ Busca de instrução;
-◦ Decodificação de instrução;
-◦ Execução;
-◦ Acesso a memória;
-◦ Escrita do resultado nos registradores;
-"""
-""""
-movi r1,10
-movi r2,5
-movi r11,3
-sw r1,0(r11) -> 
-addi r11,r11,1
-addi r1,r1,3
-addi r1,r1,r2 -> errado
-blt r11,r2,3
-movi r11,3
-lw r4,1(r11)
-movi r1,10 -> movi 1 10 0
-addi r11,r11,1 -> addi 11 11 1
-add r1,r1,r11 -> add 1 1 11
-
-
-
-busca -  decodifica - executa - memoria(executas lw e sw) - registrador(executa operaçoes - as de memoria)
-"""
-#m
+#Sergio Alvarez RA115735
+#Guilherme Ferrari RA112679
 class memoria:
   def __init__(self):
     self.mem = [0] * 100
@@ -36,22 +7,23 @@ class memoria:
 class registrador:
   def __init__(self):
     self.r = [0] * 32
+    self.pc = 0
+    self.sp = 0
+    self.ra = 0
 
 
 class pipeline:
   def __init__(self):
     self.pipe = {new_list: "NOOP" for new_list in ['Busca', 'Decodifica', 'Executa', 'Memoria', 'Regist']}
-    #{'Busca': None, 'Decodifica': None, 'Executa': None, 'Memoria': None, 'Regist': None}
 
   def fpipe(self, instrucao, registrador, memoria):
-    #instrucao.comando, instrucao.pos1, instrucao.pos2, instrucao.pos3 = fetch(instrucao)
     self.pipelist = ['Busca', 'Decodifica', 'Executa', 'Memoria', 'Regist']
     instrucao.pos1, instrucao.pos2, instrucao.pos3 = instrucao.pos1.replace("r",""), instrucao.pos2.replace("r",""), instrucao.pos3.replace("r","")
       
 
 class instrucao:
   def __init__(self, instrucao):
-    self.instrucao = instrucao[0:len(instrucao)-1] #tira o \n
+    self.instrucao = instrucao.replace('\n', '') #tira o \n
     comando, pos1, pos2, pos3 = fetch(instrucao)
     self.comando = comando
     self.pos1 = pos1
@@ -59,7 +31,8 @@ class instrucao:
     self.pos3 = pos3
 
   def operar(self, registrador, memoria):
-   #add r1,r2
+    self.pos1, self.pos2, self.pos3 = self.pos1.replace("r",""), self.pos2.replace("r",""), self.pos3.replace("r","")
+
     if self.comando == "movi":      
       registrador.r[int(self.pos1)] = int(self.pos2)
 
@@ -84,102 +57,139 @@ class instrucao:
     elif self.comando == "div":
       registrador.r[int(self.pos1)] = registrador.r[int(self.pos2)] / int(self.pos3)
 
-  def memoria(self, instrucao, memoria):
+    elif self.comando == "lw":
+      registrador.r[int(self.pos1)] = memoria.mem[int(self.pos2)+registrador.r[int(self.pos3)]]
+
+  def memoria(self, registrador, memoria):
+    self.pos1, self.pos2, self.pos3 = self.pos1.replace("r",""), self.pos2.replace("r",""), self.pos3.replace("r","")
     if self.comando == "sw":
       memoria.mem[int(self.pos2)+registrador.r[int(self.pos3)]] = registrador.r[int(self.pos1)] 
 
-    elif self.comando == "lw":
-      registrador.r[int(self.pos1)] = memoria.mem[int(self.pos2)+registrador.r[int(self.pos3)]]
-    
 
-  #def executa(self, instrucao, memoria)
-  
-  ##
-  # Atenção aqui: Qualquer alteração feita no actPipeLine irá mudar o pipeline
-  # original, caso queria fazer alteração, use um pipeline auxiliar:
-  # pipeAux = actPipeLine.copy()
-  #
-  #elif (self.comando in treeOp): não está funcionando direito
-  #se pa nem os outros
-  def decodifica(self, actPipeLine):
+  def desvios(self, registrador, memoria, j, pipe):
+    self.pos1, self.pos2, self.pos3 = self.pos1.replace("r",""), self.pos2.replace("r",""), self.pos3.replace("r","")
+
+    if self.comando == "blt":
+      if registrador.r[int(self.pos1)] < registrador.r[int(self.pos2)]:
+        pipe['Busca'] = 'NOOP'
+        pipe['Decodifica'] = 'NOOP'
+        return int(self.pos3) - 1, pipe
+
+    if self.comando == "bgt":
+      if registrador.r[int(self.pos1)] < registrador.r[int(self.pos2)]:
+        pipe['Busca'] = 'NOOP'
+        pipe['Decodifica'] = 'NOOP'
+        return int(self.pos3) - 1, pipe
+
+    if self.comando == "beq":
+      if registrador.r[int(self.pos1)] == registrador.r[int(self.pos2)]:
+        pipe['Busca'] = 'NOOP'
+        pipe['Decodifica'] = 'NOOP'
+        return int(self.pos3) - 1, pipe
+
+    if self.comando == "j":
+        pipe['Busca'] = 'NOOP'
+        pipe['Decodifica'] = 'NOOP'
+        print('1', self.pos1)
+        return int(self.pos1) - 1, pipe
+
+    if self.comando == "jr":
+        pipe['Busca'] = 'NOOP'
+        pipe['Decodifica'] = 'NOOP'
+        return registrador.r[int(self.pos1)] - 1, pipe
+
+    if self.comando == "jal":
+        pipe['Busca'] = 'NOOP'
+        pipe['Decodifica'] = 'NOOP'
+        registrador.ra = int(self.pos1)
+        return registrador.r[int(self.pos1)] - 1, pipe
+
+    else:
+      return j, pipe  
+
+  def decodifica(self, actPipeLine, memoria, registrador, pc):
       pipelist = ['Busca', 'Decodifica', 'Executa', 'Memoria', 'Regist']
-      depend = []
+      depend = 0
       i = 0
-      oneOp = ['movi']
-      twoOp = ['mov', "addi"]
-      treeOp = ['add']
-      execute = instrucao(actPipeLine["Executa"])
-      mem = instrucao(actPipeLine["Memoria"])
-      reg = instrucao(actPipeLine["Regist"])
-          
-      print(self.comando)
-      if (self.comando in oneOp):
-          print("a")
-          if (execute.pos1 == self.pos1):
-              depend.append("Executa")
-          if (mem.pos1 == self.pos1):
-              depend.append("Memoria")
-          if (reg.pos1 == self.pos1):
-              depend.append("Regist")
-          pipeAux = actPipeLine.copy()
-          i = 2
-          for item in depend:
-             actPipeLine[pipelist[i]] = "NOOP"
-             for items in actPipeLine.values():
-                 if (i == len(actPipeLine) - 1): # Out of range handle
-                     break
-                 actPipeLine[pipelist[i+1]] = pipeAux[pipelist[i]] # Move todos os valores da pipeline para a direita
-                                                    # começando da posição 1 
-                 i += 1
-                 
-      elif (self.comando in twoOp):
-          print("b")
-          if (execute.pos1 == self.pos1 or execute.pos1 == self.pos2):
-              depend.append("Executa")
-          if (mem.pos1 == self.pos1 or mem.pos1 == self.pos2):
-              depend.append("Memoria")
-          if (reg.pos1 == self.pos1 or reg.pos1 == self.pos2):
-              depend.append("Regist")
-          pipeAux = actPipeLine.copy()
-          i = 2
-          for item in depend:
-             actPipeLine[pipelist[i]] = "NOOP"
-             for items in actPipeLine.values():
-                 if (i == len(actPipeLine) - 1): # Out of range handle
-                     break
-                 actPipeLine[pipelist[i+1]] = pipeAux[pipelist[i]] # Move todos os valores da pipeline para a direita
-                                                    # começando da posição 1 
-                 i += 1
-             
-      elif (self.comando in treeOp):
-          if (execute.pos1 == self.pos1 or execute.pos1 == self.pos2 or execute.pos1 == self.pos3):
-              depend.append("Executa")
-          if (mem.pos1 == self.pos1 or mem.pos1 == self.pos2 or mem.pos1 == self.pos3):
-              depend.append("Memoria")
-          if (reg.pos1 == self.pos1 or reg.pos1 == self.pos2 or reg.pos1 == self.pos3):
-              depend.append("Regist")
-          pipeAux = actPipeLine.copy()
-          i = 2
-          print(depend)
-          print(pipeAux)
-          j = 2
-          for item in depend:
-             actPipeLine[pipelist[j]] = "NOOP"
-             for items in actPipeLine.values():
-                 if (i == len(actPipeLine) - 1): # Out of range handle
-                     break
-                 actPipeLine[pipelist[i+1]] = pipeAux[pipelist[i]] # Move todos os valores da pipeline para a direita
-                 # começando da posição 1 
-                 i += 1
-             print(actPipeLine)
-             j+=1
+      var = 1
+      depend = checkHazard(self, actPipeLine)
+      if (depend == 0):
+        print("Sem hazard")
+        return
+      else:
+        print("Tratando hazard", depend)
+      i = 2
+      pipeAux = actPipeLine.copy()
+      while (var < depend):
+        i = 2
+        #executa instrucoes
+        mem = instrucao(actPipeLine["Memoria"])
+        instrucao.memoria(mem, registrador, memoria)
+        reg = instrucao(actPipeLine["Regist"])  
+        instrucao.operar(reg, registrador, memoria)
+        exe = instrucao(actPipeLine["Executa"])
+        var, actPipeLine = instrucao.desvios(exe, registrador, memoria, var, actPipeLine) 
+        printPipe(actPipeLine, registrador, memoria)
+        actPipeLine[pipelist[2]] = "NOOP"
+        for items in actPipeLine.values():
+          if (i == len(actPipeLine) - 1): # Out of range handle
+            break
+          actPipeLine[pipelist[i+1]] = pipeAux[pipelist[i]] # Move todos os valores da pipeline para a direita
+                                                            # começando da posição 1 
+          i += 1
+        var+=1
+        input()
+        pipeAux = actPipeLine.copy()
             
  
-    
-def checkHazard(instrucao, actPipeLine):
+# Retorna o número de identificação do hazard
+# Caso retornar 1, terá hazard com o operador que está no regist
+# Caso retornar 2, terá hazard com o operador que está na Memoria 
+# Caso retornar 3, terá hazard com o operador que está no Executa
+# Caso retornar 0, não terá hazard.
+def checkHazard(self, actPipeLine):
+    depend = 0
     print("checando hazard")
-     
+    oneOp = ['sw', 'lw', 'addi', 'subi']
+    twoOp = ["add", 'sub', 'mul', 'div', 'mov']
+    desvios = ['blt', 'bgt', 'beq', 'j', 'jr', 'jal']
+    execute = instrucao(actPipeLine["Executa"])
+    mem = instrucao(actPipeLine["Memoria"])
+    reg = instrucao(actPipeLine["Regist"])
+
+    if (self.comando in oneOp):
+        if (execute.pos1 == self.pos2):
+            depend = 3
+        elif (mem.pos1 == self.pos2):
+            depend = 2
+        elif (reg.pos1 == self.pos2):
+            depend = 1
+    elif (self.comando in twoOp):
+        if (execute.pos1 == self.pos2 or execute.pos1 == self.pos3):
+            depend = 3
+        elif (mem.pos1 == self.pos2 or mem.pos1 == self.pos3):
+            depend = 2
+        elif (reg.pos1 == self.pos2 or reg.pos1 == self.pos3):
+            depend = 1
+    elif (self.comando in desvios):
+        if (execute.pos1 == self.pos1 or execute.pos1 == self.pos2):
+            depend = 3
+        elif (mem.pos1 == self.pos1 or mem.pos1 == self.pos2):
+            depend = 2
+        elif (reg.pos1 == self.pos1 or reg.pos1 == self.pos2):
+            depend = 1
+    return depend
+
     
+def printPipe(pipeline, r , m):
+  print("|-----Busca-----||---Decodifica--||----Executa----||----Memoria----||----Regist-----|")  
+  print(f'|  {pipeline["Busca"]:13}||  {pipeline["Decodifica"]:13}||  {pipeline["Executa"]:13}||  {pipeline["Memoria"]:13}||  {pipeline["Regist"]:13}|')
+  print("Registrador:")
+  print(r.r)
+  print("Memoria")
+  print(m.mem)
+  print("PC : ", r.pc + 1, " SP : ", r.sp, " RA : ", r.ra ) 
+
 def fetch(opcode):
   a = []
   if (opcode == "NOOP"):
@@ -191,6 +201,11 @@ def fetch(opcode):
   b = opcode.find(",")
   space = opcode.find(" ")
   a.append(opcode[0:space]) # instrução
+  if (b == -1): # Caso o operador for J (sem vírgulas na instrução)
+      a.append(opcode[space+1:len(opcode)])
+      a.append("None")
+      a.append("None")
+      return a
   a.append(opcode[space + 1: b]) # registro
   x = opcode.find('(')
   if (x > 0): # Caso conter '('
@@ -207,23 +222,17 @@ def fetch(opcode):
       a.append(opcode[b+1: c]) # valor 1
       a.append(opcode[c+1: len(opcode)]) # valor 2, se houver
   return a
-    
-# mov r1,2
-def main():
-  #a = instrucao
-  j = 0 # Será a linha lida do arquivo
-  r = registrador()
-  m = memoria()
+
+def startR(r, m, j):
   p = pipeline()
-  #a.instrucao = input("digite uma instrução: ")
   f = open("entrada.txt", "r")
   line = f.readlines()
   opTotal = len(line) # Quantidade total de opcodes
-  # ['Busca', 'Decodifica', 'Executa', 'Memoria', 'Regist']
-  while(not all(value == "NOOP" for value in p.pipe.values()) or j == 0):
+  while(True):
     i = 0
     if (j < opTotal):
         a = instrucao(line[j])
+        r.pc = j
     else:
         a.instrucao = "NOOP"
     p.fpipe(a,r,m)
@@ -232,32 +241,34 @@ def main():
     for items in p.pipe.values(): # Iteração que irá mover os opcodes pelo pipeline
       if (i == len(p.pipelist) - 1): # Out of range handle
           break
-      p.pipe[p.pipelist[i+1]] = pAux[p.pipelist[i]] # Move todos os valores da pipeline para a direita
-                                                    # começando da posição 1
+      # Move todos os valores da pipeline para a direita começando da posição 2
+      p.pipe[p.pipelist[i+1]] = pAux[p.pipelist[i]]                          
       i += 1
-    decode = instrucao(p.pipe["Decodifica"]) 
-    execut = p.pipe["Executa"]
-    mem = p.pipe["Memoria"]
-    reg = p.pipe["Regist"]
-    decode.decodifica(p.pipe)
+    decode = instrucao(p.pipe["Decodifica"])
+    decode.decodifica(p.pipe,m,r, r.pc)
     pAux = p.pipe.copy() # Atualiza a cópia da pipeline atual
-    print("|-----Busca-----||---Decodifica--||----Executa----||----Memoria----||----Regist-----|")
-    print(f'|  {p.pipe["Busca"]:13}||  {p.pipe["Decodifica"]:13}||  {p.pipe["Executa"]:13}||  {p.pipe["Memoria"]:13}||  {p.pipe["Regist"]:13}|')
-    input()
-    j+=1
 
-    """
-    #instrucao.operar(a,r,m)
-    print("Registrador:")
-    print(r.r)
-    print("Memoria")
-    print(m.mem)
-    """
-  f.close()  
+    #executa instrucoes
+    mem = instrucao(p.pipe["Memoria"])
+    instrucao.memoria(mem,r,m)
+    reg = instrucao(p.pipe["Regist"])  
+    instrucao.operar(reg,r,m)
+    exe = instrucao(p.pipe["Executa"])
+    j, p.pipe = instrucao.desvios(exe, r, m, r.pc, p.pipe)
+    printPipe(p.pipe,r,m)
+    isAllNoop = all(value == "NOOP" for value in p.pipe.values());
+    if (isAllNoop == True):
+      break
+    input()
+    j+=1 
+
+  f.close()
+
+def main():
+  r = registrador()
+  m = memoria()
+  line = 0
+  startR(r, m, line)
  
 if __name__ == '__main__':
     main()
-
-
-#print(a)
-

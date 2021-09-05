@@ -334,7 +334,7 @@ def randomTreeKruskal(n):
         for v in range(u+1, n):
             w = random.random()
             G.adjMatrix[u][v] = w
-
+            G.adjMatrix[u][v] = w
     G.Adj = MSTKruskal(G)
     if (isTree(G) == False):
         return None

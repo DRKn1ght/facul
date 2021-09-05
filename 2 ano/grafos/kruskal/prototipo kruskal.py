@@ -1,12 +1,16 @@
 import numpy as np
 import random
 n = 4
-adjMatrix = []
-arr = np.full((n,n), 0.)
-for i in range(n):
-        for j in range(i+1, n):
-            w = random.random()
-            arr[i][j] = w
+adjMatrix = adjMatrix =  np.array(
+                [[0., 0.20, 0.60, 0.40],
+                 [0., 0.  , 0.74, 0.46],
+                 [0., 0.  , 0.  , 0.30],
+                 [0., 0.  , 0.  , 0.]])
+arr = adjMatrix
+#for i in range(n):
+ #       for j in range(i+1, n):
+#            w = random.random()
+#            arr[i][j] = w
 print(adjMatrix)
 print()
 print(arr)

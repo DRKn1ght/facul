@@ -430,7 +430,7 @@ def randomWalkAssert():
 def KruskalAssert():
     start_time = time.time()
     print("Gerando arquivo kruskal.txt")
-    fileRandomTreeWalk = open("kruskal.txt", "w")
+    fileKruskal = open("kruskal.txt", "w")
     for n in [250, 500, 750, 1000, 1250, 1500, 1750, 2000]:
         start_time2 = time.time()
         soma = 0
@@ -441,8 +441,8 @@ def KruskalAssert():
         media = soma/500
         print("{} {}".format(n, media))
         print("--- Finalizado em %s seconds ---" % (time.time() - start_time2))
-        fileRandomTreeWalk.write("{} {}\n".format(n, media))
-    fileRandomTreeWalk.close()
+        fileKruskal.write("{} {}\n".format(n, media))
+    fileKruskal.close()
     print("--- Tempo total: %s seconds ---" % (time.time() - start_time))
     print("Arquivo gerado")
 
@@ -451,7 +451,7 @@ def KruskalAssert():
 def PrimAssert():
     start_time = time.time()
     print("Gerando arquivo prim.txt")
-    fileRandomTreeWalk = open("prim.txt", "w")
+    filePrim = open("prim.txt", "w")
     for n in [250, 500, 750, 1000, 1250, 1500, 1750, 2000]:
         start_time2 = time.time()
         soma = 0
@@ -462,8 +462,8 @@ def PrimAssert():
         media = soma/500
         print("{} {}".format(n, media))
         print("--- Finalizado em %s seconds ---" % (time.time() - start_time2))
-        fileRandomTreeWalk.write("{} {}\n".format(n, media))
-    fileRandomTreeWalk.close()
+        filePrim.write("{} {}\n".format(n, media))
+    filePrim.close()
     print("--- Tempo total: %s seconds ---" % (time.time() - start_time))
     print("Arquivo gerado")
 
