@@ -1,0 +1,17 @@
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |        61 |           62 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer | False |       |       |       |       |         |         |       |      
+  Mult1 | False |       |       |       |       |         |         |       |      
+  Mult2 | False |       |       |       |       |         |         |       |      
+    Add | False |       |       |       |       |         |         |       |      
+ Divide | False |       |       |       |       |         |         |       |      
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       |       |       |       | 
+Clock: 62
+

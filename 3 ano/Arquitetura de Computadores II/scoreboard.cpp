@@ -37,9 +37,9 @@ struct instructionList
 struct instructionStatus
 {
     int issue, readOperand, executionOperand, writeResult;
-    vector<int>finalizedList;
-    int finalizedCount = 0;
+    int issueCount = 0, finalizedCount = 0, functionalUnit = -1;
     int clock = 0;
+    vector<int>finalizedList;
 } InstructionStatus[MAX_INSTRUCTION];
 
 struct functionalUnitStatus
@@ -59,11 +59,15 @@ string IsBusy(int functionalUnit)
 {
     return FunctionalUnitStatus[functionalUnit].busy;
 }
-int RegToInt(string reg){
+int RegToInt(string reg)
+{
+    if (reg == "rb")
+        return MAX_REG;
     return stoi(reg.substr(1, reg.length() - 1)) - 1;
 }
 
-void ClearFunctionalUnit(int functionalUnit){
+void ClearFunctionalUnit(int functionalUnit)
+{
     string fi = FunctionalUnitStatus[functionalUnit].fi;
     int reg;
     FunctionalUnitStatus[functionalUnit].busy = FALSE;
@@ -78,16 +82,27 @@ void ClearFunctionalUnit(int functionalUnit){
     FunctionalUnitStatus[functionalUnit].functionalUnit = -1;
     reg = RegToInt(fi);
     RegisterStatus[reg].status = NONE;
+    for (int i = 0; i < MAX_UNIT; i++)
+    {
+        if (FunctionalUnitStatus[i].qj == FunctionalUnitStatus->unitList[functionalUnit]){
+            FunctionalUnitStatus[i].qj = NONE;
+            FunctionalUnitStatus[i].rj = TRUE;
+        }
+        if (FunctionalUnitStatus[i].qk == FunctionalUnitStatus->unitList[functionalUnit]){
+            FunctionalUnitStatus[i].qk = NONE;
+            FunctionalUnitStatus[i].rk = TRUE;
+        }
+    }
 }
 
-string CheckRj(int instruction)
+string CheckRj(int functionalUnit)
 {
-    string fj = FunctionalUnitStatus[instruction].fj;
+    string fj = FunctionalUnitStatus[functionalUnit].fj;
     if (fj == NONE)
         return NONE;
     for (int i = 0; i < MAX_UNIT; i++)
     {
-        if (FunctionalUnitStatus[i].busy == TRUE && instruction != i)
+        if (FunctionalUnitStatus[i].busy == TRUE && functionalUnit != i)
         {
             if (FunctionalUnitStatus[i].fi == fj)
             {
@@ -98,16 +113,17 @@ string CheckRj(int instruction)
     return TRUE;
 }
 
-string CheckRk(int instruction)
+string CheckRk(int functionalUnit)
 {
-    string fk = FunctionalUnitStatus[instruction].fk;
+    string fk = FunctionalUnitStatus[functionalUnit].fk;
+
     if (fk == NONE)
         return NONE;
     for (int i = 0; i < MAX_UNIT; i++)
     {
-        if (FunctionalUnitStatus[i].busy == TRUE && instruction != i)
+        if (FunctionalUnitStatus[i].busy == TRUE && functionalUnit != i)
         {
-            if (FunctionalUnitStatus[i].fk == fk)
+            if (FunctionalUnitStatus[i].fi == fk)
             {
                 return FALSE;
             }
@@ -116,52 +132,98 @@ string CheckRk(int instruction)
     return TRUE;
 }
 
-
-void UpdateFunctionalUnitStatus(int instruction)
+string GetQj(int functionalUnit)
 {
-    int functionUnit;
+    string fj = FunctionalUnitStatus[functionalUnit].fj;
+    for (int i = 0; i < MAX_UNIT; i++)
+    {
+        if (FunctionalUnitStatus[i].busy == TRUE && functionalUnit != i)
+        {
+            if (FunctionalUnitStatus[i].fi == fj)
+            {
+                return FunctionalUnitStatus->unitList[i];
+            }
+        }
+    }
+    return NONE;
+}
+
+string GetQk(int functionalUnit)
+{
+    string fk = FunctionalUnitStatus[functionalUnit].fk;
+    for (int i = 0; i < MAX_UNIT; i++)
+    {
+        if (FunctionalUnitStatus[i].busy == TRUE && functionalUnit != i)
+        {
+            if (FunctionalUnitStatus[i].fi == fk)
+            {
+                return FunctionalUnitStatus->unitList[i];
+            }
+        }
+    }
+    return NONE;
+}
+
+bool CheckHazard(int instruction)
+{
+    int functionalUnit = InstructionStatus[instruction].functionalUnit;
+    if (functionalUnit == -1)
+        return false;
+    if (FunctionalUnitStatus[functionalUnit].qj != NONE || FunctionalUnitStatus[functionalUnit].qk != NONE)
+        return true;
+    return false;
+}
+
+int UpdateFunctionalUnitStatus(int instruction)
+{
+    int functionalUnit;
     string op = InstructionList[instruction].instruction;
     string fi = InstructionList[instruction].regDestino;
     string fj = InstructionList[instruction].regOperando1;
     string fk = InstructionList[instruction].regOperando2;
-    string rj, rk;
+    string qj, qk, rj, rk;
     if (op == "ld")
     {
-        functionUnit = INTEGER;
+        functionalUnit = INTEGER;
         fk = InstructionList[instruction].regBaseLd;
     }
     else if (op == "muld")
     {
-        functionUnit = MULT1;
-        if (IsBusy(functionUnit) == TRUE)
-            functionUnit = MULT2;
+        functionalUnit = MULT1;
+        if (IsBusy(functionalUnit) == TRUE)
+            functionalUnit = MULT2;
     }
     else if (op == "divd")
     {
-        functionUnit = DIVIDE;
+        functionalUnit = DIVIDE;
     }
     else if (op == "subd" || op == "addd")
     {
-        functionUnit = ADD;
+        functionalUnit = ADD;
     }
 
-    if (IsBusy(functionUnit) == FALSE)
+    if (IsBusy(functionalUnit) == FALSE)
     {
-        FunctionalUnitStatus[instruction].functionalUnit = functionUnit;
-        FunctionalUnitStatus[functionUnit].busy = TRUE;
-        FunctionalUnitStatus[functionUnit].op = op;
-        FunctionalUnitStatus[functionUnit].fi = fi;
-        FunctionalUnitStatus[functionUnit].fj = fj;
-        FunctionalUnitStatus[functionUnit].fk = fk;
-        //qj
-        //qk
-        rj = CheckRj(instruction);
-        FunctionalUnitStatus[functionUnit].rj = rj;
-        rk = CheckRk(instruction);
-        FunctionalUnitStatus[functionUnit].rk = rk;
+        InstructionStatus[instruction].functionalUnit = functionalUnit;
+        FunctionalUnitStatus[instruction].functionalUnit = functionalUnit;
+        FunctionalUnitStatus[functionalUnit].busy = TRUE;
+        FunctionalUnitStatus[functionalUnit].op = op;
+        FunctionalUnitStatus[functionalUnit].fi = fi;
+        FunctionalUnitStatus[functionalUnit].fj = fj;
+        FunctionalUnitStatus[functionalUnit].fk = fk;
+        qj = GetQj(functionalUnit);
+        qk = GetQk(functionalUnit);
+        FunctionalUnitStatus[functionalUnit].qj = qj;
+        FunctionalUnitStatus[functionalUnit].qk = qk;
+        rj = CheckRj(functionalUnit);
+        rk = CheckRk(functionalUnit);
+        FunctionalUnitStatus[functionalUnit].rj = rj;
+        FunctionalUnitStatus[functionalUnit].rk = rk;
         int reg = RegToInt(fi);
-        RegisterStatus[reg].status = FunctionalUnitStatus->unitList[functionUnit];
+        RegisterStatus[reg].status = FunctionalUnitStatus->unitList[functionalUnit];
+        return 1;
     }
+    return 0;
 }
 
 void PrintInstructions()
@@ -183,24 +245,29 @@ void PrintInstructions()
 void PrintFunctionalUnitStatus()
 {
 
-    cout << setw(7) << "FU " << setw(9) << "BUSY " << setfill(' ') << setw(5) << "OP " << setfill(' ') << setw(5) << "Fi " << setfill(' ') << setw(5) << "Fj " << setfill(' ') << setw(5) << "Fk " << setfill(' ') << setw(5) << "Qj " << setfill(' ') << setw(5) << "Qk " << setfill(' ') << setw(5) << "Rj " << setfill(' ') << setw(5) << "Rk " << endl;
+    cout << setw(7) << "FU " << setw(9) << "BUSY " << setfill(' ') << setw(8) << "OP " << setfill(' ') << setw(8) << "Fi " << setfill(' ') << setw(8) << "Fj " << setfill(' ') << setw(8) << "Fk " << setfill(' ') << setw(8) << "Qj " << setfill(' ') << setw(8) << "Qk " << setfill(' ') << setw(8) << "Rj " << setfill(' ') << setw(8) << "Rk " << endl;
     for (int i = 0; i < MAX_UNIT; i++)
     {
-        cout << setfill(' ') << setw(7) << FunctionalUnitStatus->unitList[i] << " | " << setfill(' ') << setw(5) << FunctionalUnitStatus[i].busy << " | " << setfill(' ') << setw(2) << FunctionalUnitStatus[i].op << " | " << setfill(' ') << setw(2) << FunctionalUnitStatus[i].fi << " | " << setfill(' ') << setw(2) << FunctionalUnitStatus[i].fj << " | " << setfill(' ') << setw(2) << FunctionalUnitStatus[i].fk << " | " << setfill(' ') << setw(2) << FunctionalUnitStatus[i].qj << " | " << setfill(' ') << setw(2) << FunctionalUnitStatus[i].qk << " | " << setfill(' ') << setw(2) << FunctionalUnitStatus[i].rj << " | " << setfill(' ') << setw(2) << FunctionalUnitStatus[i].rk << endl;
+        cout << setfill(' ') << setw(7) << FunctionalUnitStatus->unitList[i] << " | " << setfill(' ') << setw(5) << FunctionalUnitStatus[i].busy << " | " << setfill(' ') << setw(5) << FunctionalUnitStatus[i].op << " | " << setfill(' ') << setw(5) << FunctionalUnitStatus[i].fi << " | " << setfill(' ') << setw(5) << FunctionalUnitStatus[i].fj << " | " << setfill(' ') << setw(5) << FunctionalUnitStatus[i].fk << " | " << setfill(' ') << setw(7) << FunctionalUnitStatus[i].qj << " | " << setfill(' ') << setw(7) << FunctionalUnitStatus[i].qk << " | " << setfill(' ') << setw(5) << FunctionalUnitStatus[i].rj << " | " << setfill(' ') << setw(5) << FunctionalUnitStatus[i].rk << endl;
     }
 }
 
-void PrintRegisterStatus(){
-    cout << setw(8) << "r1 " << setw(8) << "r2 " << setw(8) <<  "r3 " << setw(8) << "r4 " << setw(8) <<  "r5 " << setw(8) << "r6 " << setw(8) <<  "r7 " << setw(8) << "r8 " << setw(8) <<  "r9 " << setw(8) << "r10 " << setw(8) <<  "r11 " << setw(8) << "r12 " << setw(8) <<  "rb " << setw(8) << endl;
-    for (int i = 0; i < MAX_REG; i++){
-        cout << RegisterStatus[i].status <<  " | " << setfill(' ') << setw(5);
+void PrintRegisterStatus()
+{
+    cout << setw(8) << "r1 " << setw(8) << "r2 " << setw(8) << "r3 " << setw(8) << "r4 " << setw(8) << "r5 " << setw(8) << "r6 " << setw(8) << "r7 " << setw(8) << "r8 " << setw(8) << "r9 " << setw(8) << "r10 " << setw(8) << "r11 " << setw(8) << "r12 " << setw(8) << "rb " << setw(8) << endl;
+    for (int i = 0; i < MAX_REG; i++)
+    {
+        cout << RegisterStatus[i].status << " | " << setfill(' ') << setw(5);
     }
     cout << endl;
 }
 
-void PrintInstructionStatus(){
-    cout << setfill(' ') << setw(7) << "Issue |" << setfill(' ') << setw(7) << " Read Operand |" << setfill(' ') << setw(7) << " Execution |" << setfill(' ') << setw(7) << " Write Result |" << " Intructions"<< endl;
-    for (int i = 0; i < InstructionList->count; i++){
+void PrintInstructionStatus()
+{
+    cout << setfill(' ') << setw(7) << "Issue |" << setfill(' ') << setw(7) << " Read Operand |" << setfill(' ') << setw(7) << " Execution |" << setfill(' ') << setw(7) << " Write Result |"
+         << " Intructions" << endl;
+    for (int i = 0; i < InstructionList->count; i++)
+    {
         cout << setw(5) << InstructionStatus[i].issue << " | " << setfill(' ') << setw(12) << InstructionStatus[i].readOperand << " | " << setfill(' ') << setw(9) << InstructionStatus[i].executionOperand << " | " << setfill(' ') << setw(12) << InstructionStatus[i].writeResult << " | ";
         if (InstructionList[i].instruction == "ld")
         {
@@ -210,7 +277,7 @@ void PrintInstructionStatus(){
         {
             cout << InstructionList[i].instruction << " " << InstructionList[i].regDestino << " " << InstructionList[i].regOperando1 << " " << InstructionList[i].regOperando2 << endl;
         }
-   }
+    }
 }
 
 void Issue()
@@ -218,37 +285,86 @@ void Issue()
     int clock = InstructionStatus->clock;
     int processing = InstructionList->processing;
     clock++;
-    UpdateFunctionalUnitStatus(processing);
-    InstructionStatus[processing].issue = clock;
-    
-}
-
-void ReadOperand(){
-    int clock = InstructionStatus->clock;
-    int processing = InstructionList->processing;
-    clock++;
-    InstructionStatus[processing].readOperand = clock;
-
-}
-
-void ExecutionOperand(){
-    int clock = InstructionStatus->clock;
-    int processing = InstructionList->processing;
-    clock++;
-    InstructionStatus[processing].executionOperand = clock;
-
-}
-
-int WriteResult(){
-    int clock = InstructionStatus->clock;
-    int processing = InstructionList->processing;
-    if (InstructionStatus[processing].executionOperand == 0){
-        return 0;
+    while (InstructionStatus[processing].issue != 0)
+    {
+        processing++;
     }
-    InstructionStatus->finalizedList.push_back(processing);
-    InstructionStatus->finalizedCount++;
-    ClearFunctionalUnit(FunctionalUnitStatus[processing].functionalUnit);
-    return 1;
+
+    if (UpdateFunctionalUnitStatus(processing) == 1)
+    {
+        InstructionStatus[processing].issue = clock;
+        InstructionStatus->issueCount++;
+    }
+}
+
+void ReadOperand()
+{
+    int clock = InstructionStatus->clock;
+    int processing = InstructionList->processing;
+    int issueCount = InstructionStatus->issueCount;
+    clock++;
+    while (processing < issueCount)
+    {
+        if (CheckHazard(processing) == false && InstructionStatus[processing].issue > 0 && InstructionStatus[processing].readOperand == 0)
+            InstructionStatus[processing].readOperand = clock;
+        processing++;
+    }
+}
+
+void ExecutionOperand()
+{
+    int clock = InstructionStatus->clock;
+    int latency;
+    int processing = InstructionList->processing;
+    int issueCount = InstructionStatus->issueCount;
+    string op;
+    clock++;
+    while (processing < issueCount){
+        if (InstructionStatus[processing].readOperand > 0 && InstructionStatus[processing].executionOperand == 0){
+            op = InstructionList[processing].instruction;
+            if (op == "ld"){
+                latency = Latencies.ld;
+            }else if (op == "muld"){
+                latency = Latencies.muld;
+            }else if (op == "divd"){
+                latency = Latencies.divd;
+            }else if (op == "subd"){
+                latency = Latencies.subd;
+            }else if (op == "addd"){
+                latency = Latencies.addd;
+            }
+            if (clock == InstructionStatus[processing].readOperand + latency)
+                InstructionStatus[processing].executionOperand = clock;
+        }
+        processing++;
+    }
+}
+
+void WriteResult()
+{
+    int clock = InstructionStatus->clock;
+    clock++;
+    int processing = InstructionList->processing;
+    int issueCount = InstructionStatus->issueCount;
+    bool canFinish = true;
+    while (processing < issueCount){
+        if (InstructionStatus[processing].executionOperand > 0 && InstructionStatus[processing].writeResult == 0){
+            canFinish = true;
+            for (int earlierInstruction = processing; earlierInstruction > 0; earlierInstruction--){
+                if (CheckHazard(earlierInstruction) == true && InstructionStatus[earlierInstruction].readOperand == 0){
+                    canFinish = false;
+                    break;
+                }
+            }
+            if (canFinish){
+                InstructionStatus->finalizedList.push_back(processing);
+                InstructionStatus[processing].writeResult = clock;
+                InstructionStatus->finalizedCount++;
+                InstructionStatus[processing].functionalUnit = -1;
+            }
+        }
+        processing++;
+    }
 }
 
 void FetchInstructions(string instructionLine)
@@ -303,15 +419,33 @@ void ReadFile(string dir)
     {
         FetchInstructions(line);
     }
-    while (InstructionStatus->finalizedCount != InstructionList->count){
-        if (WriteResult() == 1){
-            
+    freopen("output.txt","w",stdout);
+    while (InstructionStatus->finalizedCount != InstructionList->count)
+    {
+        WriteResult();
+        ExecutionOperand();
+        ReadOperand();
+        Issue();
+        int finalizedSize = InstructionStatus->finalizedList.size();
+        for (int i = finalizedSize; i > 0; i--){
+            int finalized = InstructionStatus->finalizedList[i - 1];
+            InstructionStatus->finalizedList.pop_back();
+            ClearFunctionalUnit(FunctionalUnitStatus[finalized].functionalUnit);
         }
+        PrintInstructionStatus();
+        cout << endl;
+        PrintFunctionalUnitStatus();
+        cout << endl;
+        PrintRegisterStatus();
+        cout << endl;
+        InstructionStatus->clock++;
+        cout << "Clock: " << InstructionStatus->clock << endl;
+        cout << endl;
     }
 }
 
 int main()
 {
-    ReadFile("./entrada.txt");
+    ReadFile("./entrada2.txt");
     return 0;
 }
