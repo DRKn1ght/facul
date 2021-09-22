@@ -1,0 +1,1240 @@
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            0 |         0 |            0 | ld r6 32+ r2
+    0 |            0 |         0 |            0 | ld r2 45+ r3
+    0 |            0 |         0 |            0 | muld r1 r2 r4
+    0 |            0 |         0 |            0 | subd r8 r6 r2
+    0 |            0 |         0 |            0 | divd r10 r1 r6
+    0 |            0 |         0 |            0 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |   Yes |    ld |    r6 |       |    r2 |         |         |       |   Yes
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |    No |       |       |       |       |         |         |       |      
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       | Integer |       |       |       |       |       |       | 
+
+Clock: 1
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         0 |            0 | ld r6 32+ r2
+    0 |            0 |         0 |            0 | ld r2 45+ r3
+    0 |            0 |         0 |            0 | muld r1 r2 r4
+    0 |            0 |         0 |            0 | subd r8 r6 r2
+    0 |            0 |         0 |            0 | divd r10 r1 r6
+    0 |            0 |         0 |            0 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |   Yes |    ld |    r6 |       |    r2 |         |         |       |    No
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |    No |       |       |       |       |         |         |       |      
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       | Integer |       |       |       |       |       |       | 
+
+Clock: 2
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            0 | ld r6 32+ r2
+    0 |            0 |         0 |            0 | ld r2 45+ r3
+    0 |            0 |         0 |            0 | muld r1 r2 r4
+    0 |            0 |         0 |            0 | subd r8 r6 r2
+    0 |            0 |         0 |            0 | divd r10 r1 r6
+    0 |            0 |         0 |            0 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |   Yes |    ld |    r6 |       |    r2 |         |         |       |    No
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |    No |       |       |       |       |         |         |       |      
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       | Integer |       |       |       |       |       |       | 
+
+Clock: 3
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    0 |            0 |         0 |            0 | ld r2 45+ r3
+    0 |            0 |         0 |            0 | muld r1 r2 r4
+    0 |            0 |         0 |            0 | subd r8 r6 r2
+    0 |            0 |         0 |            0 | divd r10 r1 r6
+    0 |            0 |         0 |            0 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |    No |       |       |       |       |         |         |       |      
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       |       |       |       | 
+
+Clock: 4
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            0 |         0 |            0 | ld r2 45+ r3
+    0 |            0 |         0 |            0 | muld r1 r2 r4
+    0 |            0 |         0 |            0 | subd r8 r6 r2
+    0 |            0 |         0 |            0 | divd r10 r1 r6
+    0 |            0 |         0 |            0 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |   Yes |    ld |    r2 |       |    r3 |         |         |       |   Yes
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |    No |       |       |       |       |         |         |       |      
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         | Integer |       |       |       |       |       |       |       |       |       |       | 
+
+Clock: 5
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         0 |            0 | ld r2 45+ r3
+    6 |            0 |         0 |            0 | muld r1 r2 r4
+    0 |            0 |         0 |            0 | subd r8 r6 r2
+    0 |            0 |         0 |            0 | divd r10 r1 r6
+    0 |            0 |         0 |            0 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |   Yes |    ld |    r2 |       |    r3 |         |         |       |    No
+  Mult1 |   Yes |  muld |    r1 |    r2 |    r4 | Integer |         |    No |   Yes
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |    No |       |       |       |       |         |         |       |      
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+   Mult1 | Integer |       |       |       |       |       |       |       |       |       |       | 
+
+Clock: 6
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            0 | ld r2 45+ r3
+    6 |            0 |         0 |            0 | muld r1 r2 r4
+    7 |            0 |         0 |            0 | subd r8 r6 r2
+    0 |            0 |         0 |            0 | divd r10 r1 r6
+    0 |            0 |         0 |            0 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |   Yes |    ld |    r2 |       |    r3 |         |         |       |    No
+  Mult1 |   Yes |  muld |    r1 |    r2 |    r4 | Integer |         |    No |   Yes
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |   Yes |  subd |    r8 |    r6 |    r2 |         | Integer |   Yes |    No
+ Divide |    No |       |       |       |       |         |         |       |      
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+   Mult1 | Integer |       |       |       |       |       |   Add |       |       |       |       | 
+
+Clock: 7
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            0 |         0 |            0 | muld r1 r2 r4
+    7 |            0 |         0 |            0 | subd r8 r6 r2
+    8 |            0 |         0 |            0 | divd r10 r1 r6
+    0 |            0 |         0 |            0 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |   Yes |  muld |    r1 |    r2 |    r4 |         |         |   Yes |   Yes
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |   Yes |  subd |    r8 |    r6 |    r2 |         |         |   Yes |   Yes
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |   Mult1 |         |    No |   Yes
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+   Mult1 |       |       |       |       |       |       |   Add |       | Divide |       |       | 
+
+Clock: 8
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |         0 |            0 | muld r1 r2 r4
+    7 |            9 |         0 |            0 | subd r8 r6 r2
+    8 |            0 |         0 |            0 | divd r10 r1 r6
+    0 |            0 |         0 |            0 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |   Yes |  muld |    r1 |    r2 |    r4 |         |         |    No |    No
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |   Yes |  subd |    r8 |    r6 |    r2 |         |         |    No |    No
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |   Mult1 |         |    No |   Yes
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+   Mult1 |       |       |       |       |       |       |   Add |       | Divide |       |       | 
+
+Clock: 9
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |         0 |            0 | muld r1 r2 r4
+    7 |            9 |         0 |            0 | subd r8 r6 r2
+    8 |            0 |         0 |            0 | divd r10 r1 r6
+    0 |            0 |         0 |            0 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |   Yes |  muld |    r1 |    r2 |    r4 |         |         |    No |    No
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |   Yes |  subd |    r8 |    r6 |    r2 |         |         |    No |    No
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |   Mult1 |         |    No |   Yes
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+   Mult1 |       |       |       |       |       |       |   Add |       | Divide |       |       | 
+
+Clock: 10
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |         0 |            0 | muld r1 r2 r4
+    7 |            9 |        11 |            0 | subd r8 r6 r2
+    8 |            0 |         0 |            0 | divd r10 r1 r6
+    0 |            0 |         0 |            0 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |   Yes |  muld |    r1 |    r2 |    r4 |         |         |    No |    No
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |   Yes |  subd |    r8 |    r6 |    r2 |         |         |    No |    No
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |   Mult1 |         |    No |   Yes
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+   Mult1 |       |       |       |       |       |       |   Add |       | Divide |       |       | 
+
+Clock: 11
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |         0 |            0 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |            0 |         0 |            0 | divd r10 r1 r6
+    0 |            0 |         0 |            0 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |   Yes |  muld |    r1 |    r2 |    r4 |         |         |    No |    No
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |   Mult1 |         |    No |   Yes
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+   Mult1 |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 12
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |         0 |            0 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |            0 |         0 |            0 | divd r10 r1 r6
+   13 |            0 |         0 |            0 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |   Yes |  muld |    r1 |    r2 |    r4 |         |         |    No |    No
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |   Yes |  addd |    r6 |    r8 |    r2 |         |         |   Yes |   Yes
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |   Mult1 |         |    No |   Yes
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+   Mult1 |       |       |       |       |   Add |       |       |       | Divide |       |       | 
+
+Clock: 13
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |         0 |            0 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |            0 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |         0 |            0 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |   Yes |  muld |    r1 |    r2 |    r4 |         |         |    No |    No
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |   Yes |  addd |    r6 |    r8 |    r2 |         |         |    No |    No
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |   Mult1 |         |    No |   Yes
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+   Mult1 |       |       |       |       |   Add |       |       |       | Divide |       |       | 
+
+Clock: 14
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |         0 |            0 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |            0 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |         0 |            0 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |   Yes |  muld |    r1 |    r2 |    r4 |         |         |    No |    No
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |   Yes |  addd |    r6 |    r8 |    r2 |         |         |    No |    No
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |   Mult1 |         |    No |   Yes
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+   Mult1 |       |       |       |       |   Add |       |       |       | Divide |       |       | 
+
+Clock: 15
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |         0 |            0 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |            0 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |            0 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |   Yes |  muld |    r1 |    r2 |    r4 |         |         |    No |    No
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |   Yes |  addd |    r6 |    r8 |    r2 |         |         |    No |    No
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |   Mult1 |         |    No |   Yes
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+   Mult1 |       |       |       |       |   Add |       |       |       | Divide |       |       | 
+
+Clock: 16
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |         0 |            0 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |            0 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |            0 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |   Yes |  muld |    r1 |    r2 |    r4 |         |         |    No |    No
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |   Yes |  addd |    r6 |    r8 |    r2 |         |         |    No |    No
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |   Mult1 |         |    No |   Yes
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+   Mult1 |       |       |       |       |   Add |       |       |       | Divide |       |       | 
+
+Clock: 17
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |         0 |            0 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |            0 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |            0 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |   Yes |  muld |    r1 |    r2 |    r4 |         |         |    No |    No
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |   Yes |  addd |    r6 |    r8 |    r2 |         |         |    No |    No
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |   Mult1 |         |    No |   Yes
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+   Mult1 |       |       |       |       |   Add |       |       |       | Divide |       |       | 
+
+Clock: 18
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |            0 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |            0 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |            0 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |   Yes |  muld |    r1 |    r2 |    r4 |         |         |    No |    No
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |   Yes |  addd |    r6 |    r8 |    r2 |         |         |    No |    No
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |   Mult1 |         |    No |   Yes
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+   Mult1 |       |       |       |       |   Add |       |       |       | Divide |       |       | 
+
+Clock: 19
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |            0 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |            0 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |   Yes |  addd |    r6 |    r8 |    r2 |         |         |    No |    No
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |   Yes |   Yes
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |   Add |       |       |       | Divide |       |       | 
+
+Clock: 20
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 21
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 22
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 23
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 24
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 25
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 26
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 27
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 28
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 29
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 30
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 31
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 32
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 33
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 34
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 35
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 36
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 37
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 38
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 39
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 40
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 41
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 42
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 43
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 44
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 45
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 46
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 47
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 48
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 49
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 50
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 51
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 52
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 53
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 54
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 55
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 56
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 57
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 58
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 59
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |         0 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 60
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |        61 |            0 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |   Yes |  divd |   r10 |    r1 |    r6 |         |         |    No |    No
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       | Divide |       |       | 
+
+Clock: 61
+
+Issue | Read Operand | Execution | Write Result | Intructions
+    1 |            2 |         3 |            4 | ld r6 32+ r2
+    5 |            6 |         7 |            8 | ld r2 45+ r3
+    6 |            9 |        19 |           20 | muld r1 r2 r4
+    7 |            9 |        11 |           12 | subd r8 r6 r2
+    8 |           21 |        61 |           62 | divd r10 r1 r6
+   13 |           14 |        16 |           21 | addd r6 r8 r2
+
+    FU     BUSY      OP      Fi      Fj      Fk      Qj      Qk      Rj      Rk 
+Integer |    No |       |       |       |       |         |         |       |      
+  Mult1 |    No |       |       |       |       |         |         |       |      
+  Mult2 |    No |       |       |       |       |         |         |       |      
+    Add |    No |       |       |       |       |         |         |       |      
+ Divide |    No |       |       |       |       |         |         |       |      
+
+     r1      r2      r3      r4      r5      r6      r7      r8      r9     r10     r11     r12      rb 
+         |       |       |       |       |       |       |       |       |       |       |       | 
+
+Clock: 62
+

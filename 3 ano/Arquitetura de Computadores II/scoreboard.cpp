@@ -1,3 +1,9 @@
+/*
+Aluno: Guilherme Panobianco Ferrari
+RA: 112679
+Simulador de ScoreBoarding
+*/
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -8,8 +14,8 @@ using namespace std;
 #define MAX_REG 12
 #define MAX_UNIT 5
 
-#define TRUE "True"
-#define FALSE "False"
+#define YES "Yes"
+#define NO "No"
 #define NONE ""
 
 #define INTEGER 0
@@ -29,7 +35,6 @@ struct latencies
 
 struct instructionList
 {
-    string const validInstructions[MAX_UNIT] = {"ld", "multd", "divd", "subd", "addd"};
     string instruction, regDestino, regBase, regBaseLd, regOperando1, regOperando2;
     int offset, count = 0, processing = 0;
 } InstructionList[MAX_INSTRUCTION];
@@ -39,141 +44,166 @@ struct instructionStatus
     int issue, readOperand, executionOperand, writeResult;
     int issueCount = 0, finalizedCount = 0, functionalUnit = -1;
     int clock = 0;
-    vector<int>finalizedList;
-} InstructionStatus[MAX_INSTRUCTION];
+    vector<int> finalizedList;
+};
 
 struct functionalUnitStatus
 {
     string const unitList[MAX_UNIT] = {"Integer", "Mult1", "Mult2", "Add", "Divide"};
-    string busy = FALSE, rj, rk;
+    string busy = NO, rj, rk;
     string op, fi, fj, fk, qj, qk;
     int functionalUnit = -1;
-} FunctionalUnitStatus[MAX_UNIT];
+};
 
 struct registerStatus
 {
     string status;
-} RegisterStatus[MAX_REG];
+};
 
+class scoreBoard
+{
+public:
+    instructionStatus InstructionStatus[MAX_INSTRUCTION];
+    functionalUnitStatus FunctionalUnitStatus[MAX_UNIT];
+    registerStatus RegisterStatus[MAX_REG];
+} ScoreBoard;
+
+// Recebe uma unidade funcional e retorna se está ocupada.
 string IsBusy(int functionalUnit)
 {
-    return FunctionalUnitStatus[functionalUnit].busy;
+    return ScoreBoard.FunctionalUnitStatus[functionalUnit].busy;
 }
-int RegToInt(string reg)
+
+// Recebe um registro e retorna o index do registro.
+int RegToIndex(string reg)
 {
     if (reg == "rb")
         return MAX_REG;
     return stoi(reg.substr(1, reg.length() - 1)) - 1;
 }
 
+// Recebe uma unidade funcional e a desocupa quando ela é completada.
+// Também atualiza os valores de Qj e Rj de todas as unidades funcionais além de atualizar o estado do registrador.
 void ClearFunctionalUnit(int functionalUnit)
 {
-    string fi = FunctionalUnitStatus[functionalUnit].fi;
+    string fi = ScoreBoard.FunctionalUnitStatus[functionalUnit].fi;
     int reg;
-    FunctionalUnitStatus[functionalUnit].busy = FALSE;
-    FunctionalUnitStatus[functionalUnit].op = NONE;
-    FunctionalUnitStatus[functionalUnit].fi = NONE;
-    FunctionalUnitStatus[functionalUnit].fj = NONE;
-    FunctionalUnitStatus[functionalUnit].fk = NONE;
-    FunctionalUnitStatus[functionalUnit].qj = NONE;
-    FunctionalUnitStatus[functionalUnit].qk = NONE;
-    FunctionalUnitStatus[functionalUnit].rj = NONE;
-    FunctionalUnitStatus[functionalUnit].rk = NONE;
-    FunctionalUnitStatus[functionalUnit].functionalUnit = -1;
-    reg = RegToInt(fi);
-    RegisterStatus[reg].status = NONE;
+    ScoreBoard.FunctionalUnitStatus[functionalUnit].busy = NO;
+    ScoreBoard.FunctionalUnitStatus[functionalUnit].op = NONE;
+    ScoreBoard.FunctionalUnitStatus[functionalUnit].fi = NONE;
+    ScoreBoard.FunctionalUnitStatus[functionalUnit].fj = NONE;
+    ScoreBoard.FunctionalUnitStatus[functionalUnit].fk = NONE;
+    ScoreBoard.FunctionalUnitStatus[functionalUnit].qj = NONE;
+    ScoreBoard.FunctionalUnitStatus[functionalUnit].qk = NONE;
+    ScoreBoard.FunctionalUnitStatus[functionalUnit].rj = NONE;
+    ScoreBoard.FunctionalUnitStatus[functionalUnit].rk = NONE;
+    reg = RegToIndex(fi);
+    ScoreBoard.RegisterStatus[reg].status = NONE;
     for (int i = 0; i < MAX_UNIT; i++)
     {
-        if (FunctionalUnitStatus[i].qj == FunctionalUnitStatus->unitList[functionalUnit]){
-            FunctionalUnitStatus[i].qj = NONE;
-            FunctionalUnitStatus[i].rj = TRUE;
+        if (ScoreBoard.FunctionalUnitStatus[i].qj == ScoreBoard.FunctionalUnitStatus->unitList[functionalUnit])
+        {
+            ScoreBoard.FunctionalUnitStatus[i].qj = NONE;
+            ScoreBoard.FunctionalUnitStatus[i].rj = YES;
         }
-        if (FunctionalUnitStatus[i].qk == FunctionalUnitStatus->unitList[functionalUnit]){
-            FunctionalUnitStatus[i].qk = NONE;
-            FunctionalUnitStatus[i].rk = TRUE;
+        if (ScoreBoard.FunctionalUnitStatus[i].qk == ScoreBoard.FunctionalUnitStatus->unitList[functionalUnit])
+        {
+            ScoreBoard.FunctionalUnitStatus[i].qk = NONE;
+            ScoreBoard.FunctionalUnitStatus[i].rk = YES;
         }
     }
 }
 
+// Recebe uma unidade funcional e verifica se o valor de Rj está pronto.
 string CheckRj(int functionalUnit)
 {
-    string fj = FunctionalUnitStatus[functionalUnit].fj;
+    string fj = ScoreBoard.FunctionalUnitStatus[functionalUnit].fj;
     if (fj == NONE)
         return NONE;
     for (int i = 0; i < MAX_UNIT; i++)
     {
-        if (FunctionalUnitStatus[i].busy == TRUE && functionalUnit != i)
+        if (ScoreBoard.FunctionalUnitStatus[i].busy == YES && functionalUnit != i)
         {
-            if (FunctionalUnitStatus[i].fi == fj)
+            if (ScoreBoard.FunctionalUnitStatus[i].fi == fj)
             {
-                return FALSE;
+                return NO;
             }
         }
     }
-    return TRUE;
+    return YES;
 }
 
+// Recebe uma unidade funcional e verifica se o valor de Rk está pronto.
 string CheckRk(int functionalUnit)
 {
-    string fk = FunctionalUnitStatus[functionalUnit].fk;
+    string fk = ScoreBoard.FunctionalUnitStatus[functionalUnit].fk;
 
     if (fk == NONE)
         return NONE;
     for (int i = 0; i < MAX_UNIT; i++)
     {
-        if (FunctionalUnitStatus[i].busy == TRUE && functionalUnit != i)
+        if (ScoreBoard.FunctionalUnitStatus[i].busy == YES && functionalUnit != i)
         {
-            if (FunctionalUnitStatus[i].fi == fk)
+            if (ScoreBoard.FunctionalUnitStatus[i].fi == fk)
             {
-                return FALSE;
+                return NO;
             }
         }
     }
-    return TRUE;
+    return YES;
 }
 
+// Recebe uma unidade funcional e retorna o valor de Qj.
 string GetQj(int functionalUnit)
 {
-    string fj = FunctionalUnitStatus[functionalUnit].fj;
+    string fj = ScoreBoard.FunctionalUnitStatus[functionalUnit].fj;
     for (int i = 0; i < MAX_UNIT; i++)
     {
-        if (FunctionalUnitStatus[i].busy == TRUE && functionalUnit != i)
+        if (ScoreBoard.FunctionalUnitStatus[i].busy == YES && functionalUnit != i)
         {
-            if (FunctionalUnitStatus[i].fi == fj)
+            if (ScoreBoard.FunctionalUnitStatus[i].fi == fj)
             {
-                return FunctionalUnitStatus->unitList[i];
+                return ScoreBoard.FunctionalUnitStatus->unitList[i];
             }
         }
     }
     return NONE;
 }
 
+// Recebe uma unidade funcional e retorna o valor de Qk.
 string GetQk(int functionalUnit)
 {
-    string fk = FunctionalUnitStatus[functionalUnit].fk;
+    string fk = ScoreBoard.FunctionalUnitStatus[functionalUnit].fk;
     for (int i = 0; i < MAX_UNIT; i++)
     {
-        if (FunctionalUnitStatus[i].busy == TRUE && functionalUnit != i)
+        if (ScoreBoard.FunctionalUnitStatus[i].busy == YES && functionalUnit != i)
         {
-            if (FunctionalUnitStatus[i].fi == fk)
+            if (ScoreBoard.FunctionalUnitStatus[i].fi == fk)
             {
-                return FunctionalUnitStatus->unitList[i];
+                return ScoreBoard.FunctionalUnitStatus->unitList[i];
             }
         }
     }
     return NONE;
 }
 
+// Recebe uma instrução e retorna true caso houver hazards estruturais. Retorna falso caso contrário.
 bool CheckHazard(int instruction)
 {
-    int functionalUnit = InstructionStatus[instruction].functionalUnit;
+    int functionalUnit = ScoreBoard.InstructionStatus[instruction].functionalUnit;
     if (functionalUnit == -1)
         return false;
-    if (FunctionalUnitStatus[functionalUnit].qj != NONE || FunctionalUnitStatus[functionalUnit].qk != NONE)
+    if (ScoreBoard.FunctionalUnitStatus[functionalUnit].qj != NONE || ScoreBoard.FunctionalUnitStatus[functionalUnit].qk != NONE)
         return true;
+
+    if (ScoreBoard.FunctionalUnitStatus[functionalUnit].rj == YES)
+        ScoreBoard.FunctionalUnitStatus[functionalUnit].rj = NO;
+    if (ScoreBoard.FunctionalUnitStatus[functionalUnit].rk == YES)
+        ScoreBoard.FunctionalUnitStatus[functionalUnit].rk = NO;
     return false;
 }
 
+// Recebe uma instrução e atualiza o status da unidade funcional quando a instrução for emitida.
 int UpdateFunctionalUnitStatus(int instruction)
 {
     int functionalUnit;
@@ -190,7 +220,7 @@ int UpdateFunctionalUnitStatus(int instruction)
     else if (op == "muld")
     {
         functionalUnit = MULT1;
-        if (IsBusy(functionalUnit) == TRUE)
+        if (IsBusy(functionalUnit) == YES)
             functionalUnit = MULT2;
     }
     else if (op == "divd")
@@ -201,74 +231,61 @@ int UpdateFunctionalUnitStatus(int instruction)
     {
         functionalUnit = ADD;
     }
-
-    if (IsBusy(functionalUnit) == FALSE)
+    string regDestino = InstructionList[instruction].regDestino;
+    if (IsBusy(functionalUnit) == NO && ScoreBoard.RegisterStatus[RegToIndex(regDestino)].status == NONE)
     {
-        InstructionStatus[instruction].functionalUnit = functionalUnit;
-        FunctionalUnitStatus[instruction].functionalUnit = functionalUnit;
-        FunctionalUnitStatus[functionalUnit].busy = TRUE;
-        FunctionalUnitStatus[functionalUnit].op = op;
-        FunctionalUnitStatus[functionalUnit].fi = fi;
-        FunctionalUnitStatus[functionalUnit].fj = fj;
-        FunctionalUnitStatus[functionalUnit].fk = fk;
+        ScoreBoard.InstructionStatus[instruction].functionalUnit = functionalUnit;
+        ScoreBoard.FunctionalUnitStatus[instruction].functionalUnit = functionalUnit;
+        ScoreBoard.FunctionalUnitStatus[functionalUnit].busy = YES;
+        ScoreBoard.FunctionalUnitStatus[functionalUnit].op = op;
+        ScoreBoard.FunctionalUnitStatus[functionalUnit].fi = fi;
+        ScoreBoard.FunctionalUnitStatus[functionalUnit].fj = fj;
+        ScoreBoard.FunctionalUnitStatus[functionalUnit].fk = fk;
         qj = GetQj(functionalUnit);
         qk = GetQk(functionalUnit);
-        FunctionalUnitStatus[functionalUnit].qj = qj;
-        FunctionalUnitStatus[functionalUnit].qk = qk;
+        ScoreBoard.FunctionalUnitStatus[functionalUnit].qj = qj;
+        ScoreBoard.FunctionalUnitStatus[functionalUnit].qk = qk;
         rj = CheckRj(functionalUnit);
         rk = CheckRk(functionalUnit);
-        FunctionalUnitStatus[functionalUnit].rj = rj;
-        FunctionalUnitStatus[functionalUnit].rk = rk;
-        int reg = RegToInt(fi);
-        RegisterStatus[reg].status = FunctionalUnitStatus->unitList[functionalUnit];
+        ScoreBoard.FunctionalUnitStatus[functionalUnit].rj = rj;
+        ScoreBoard.FunctionalUnitStatus[functionalUnit].rk = rk;
+        int reg = RegToIndex(fi);
+        ScoreBoard.RegisterStatus[reg].status = ScoreBoard.FunctionalUnitStatus->unitList[functionalUnit];
         return 1;
     }
     return 0;
 }
 
-void PrintInstructions()
-{
-    int instructionCount = InstructionList->count;
-    for (int i = 0; i < instructionCount; i++)
-    {
-        if (InstructionList[i].instruction == "ld")
-        {
-            cout << InstructionList[i].instruction << " " << InstructionList[i].regDestino << " " << InstructionList[i].offset << "+ " << InstructionList[i].regBaseLd << endl;
-        }
-        else
-        {
-            cout << InstructionList[i].instruction << " " << InstructionList[i].regDestino << " " << InstructionList[i].regOperando1 << " " << InstructionList[i].regOperando2 << endl;
-        }
-    }
-}
-
+// Imprime o status da unidade funcional no arquivo de saída.
 void PrintFunctionalUnitStatus()
 {
 
     cout << setw(7) << "FU " << setw(9) << "BUSY " << setfill(' ') << setw(8) << "OP " << setfill(' ') << setw(8) << "Fi " << setfill(' ') << setw(8) << "Fj " << setfill(' ') << setw(8) << "Fk " << setfill(' ') << setw(8) << "Qj " << setfill(' ') << setw(8) << "Qk " << setfill(' ') << setw(8) << "Rj " << setfill(' ') << setw(8) << "Rk " << endl;
     for (int i = 0; i < MAX_UNIT; i++)
     {
-        cout << setfill(' ') << setw(7) << FunctionalUnitStatus->unitList[i] << " | " << setfill(' ') << setw(5) << FunctionalUnitStatus[i].busy << " | " << setfill(' ') << setw(5) << FunctionalUnitStatus[i].op << " | " << setfill(' ') << setw(5) << FunctionalUnitStatus[i].fi << " | " << setfill(' ') << setw(5) << FunctionalUnitStatus[i].fj << " | " << setfill(' ') << setw(5) << FunctionalUnitStatus[i].fk << " | " << setfill(' ') << setw(7) << FunctionalUnitStatus[i].qj << " | " << setfill(' ') << setw(7) << FunctionalUnitStatus[i].qk << " | " << setfill(' ') << setw(5) << FunctionalUnitStatus[i].rj << " | " << setfill(' ') << setw(5) << FunctionalUnitStatus[i].rk << endl;
+        cout << setfill(' ') << setw(7) << ScoreBoard.FunctionalUnitStatus->unitList[i] << " | " << setfill(' ') << setw(5) << ScoreBoard.FunctionalUnitStatus[i].busy << " | " << setfill(' ') << setw(5) << ScoreBoard.FunctionalUnitStatus[i].op << " | " << setfill(' ') << setw(5) << ScoreBoard.FunctionalUnitStatus[i].fi << " | " << setfill(' ') << setw(5) << ScoreBoard.FunctionalUnitStatus[i].fj << " | " << setfill(' ') << setw(5) << ScoreBoard.FunctionalUnitStatus[i].fk << " | " << setfill(' ') << setw(7) << ScoreBoard.FunctionalUnitStatus[i].qj << " | " << setfill(' ') << setw(7) << ScoreBoard.FunctionalUnitStatus[i].qk << " | " << setfill(' ') << setw(5) << ScoreBoard.FunctionalUnitStatus[i].rj << " | " << setfill(' ') << setw(5) << ScoreBoard.FunctionalUnitStatus[i].rk << endl;
     }
 }
 
+// Imprime o status do registrador no arquivo de saída.
 void PrintRegisterStatus()
 {
     cout << setw(8) << "r1 " << setw(8) << "r2 " << setw(8) << "r3 " << setw(8) << "r4 " << setw(8) << "r5 " << setw(8) << "r6 " << setw(8) << "r7 " << setw(8) << "r8 " << setw(8) << "r9 " << setw(8) << "r10 " << setw(8) << "r11 " << setw(8) << "r12 " << setw(8) << "rb " << setw(8) << endl;
     for (int i = 0; i < MAX_REG; i++)
     {
-        cout << RegisterStatus[i].status << " | " << setfill(' ') << setw(5);
+        cout << ScoreBoard.RegisterStatus[i].status << " | " << setfill(' ') << setw(5);
     }
     cout << endl;
 }
 
+// Imprime o status das instruções no arquivo de saída.
 void PrintInstructionStatus()
 {
     cout << setfill(' ') << setw(7) << "Issue |" << setfill(' ') << setw(7) << " Read Operand |" << setfill(' ') << setw(7) << " Execution |" << setfill(' ') << setw(7) << " Write Result |"
          << " Intructions" << endl;
     for (int i = 0; i < InstructionList->count; i++)
     {
-        cout << setw(5) << InstructionStatus[i].issue << " | " << setfill(' ') << setw(12) << InstructionStatus[i].readOperand << " | " << setfill(' ') << setw(9) << InstructionStatus[i].executionOperand << " | " << setfill(' ') << setw(12) << InstructionStatus[i].writeResult << " | ";
+        cout << setw(5) << ScoreBoard.InstructionStatus[i].issue << " | " << setfill(' ') << setw(12) << ScoreBoard.InstructionStatus[i].readOperand << " | " << setfill(' ') << setw(9) << ScoreBoard.InstructionStatus[i].executionOperand << " | " << setfill(' ') << setw(12) << ScoreBoard.InstructionStatus[i].writeResult << " | ";
         if (InstructionList[i].instruction == "ld")
         {
             cout << InstructionList[i].instruction << " " << InstructionList[i].regDestino << " " << InstructionList[i].offset << "+ " << InstructionList[i].regBaseLd << endl;
@@ -280,93 +297,116 @@ void PrintInstructionStatus()
     }
 }
 
+// Método que emite a instrução.
 void Issue()
 {
-    int clock = InstructionStatus->clock;
+    int clock = ScoreBoard.InstructionStatus->clock;
     int processing = InstructionList->processing;
     clock++;
-    while (InstructionStatus[processing].issue != 0)
+    while (ScoreBoard.InstructionStatus[processing].issue != 0)
     {
         processing++;
     }
 
     if (UpdateFunctionalUnitStatus(processing) == 1)
     {
-        InstructionStatus[processing].issue = clock;
-        InstructionStatus->issueCount++;
+        ScoreBoard.InstructionStatus[processing].issue = clock;
+        ScoreBoard.InstructionStatus->issueCount++;
     }
 }
 
+// Método que faz a leitura do operando da instrução.
 void ReadOperand()
 {
-    int clock = InstructionStatus->clock;
+    int clock = ScoreBoard.InstructionStatus->clock;
     int processing = InstructionList->processing;
-    int issueCount = InstructionStatus->issueCount;
+    int issueCount = ScoreBoard.InstructionStatus->issueCount;
     clock++;
     while (processing < issueCount)
     {
-        if (CheckHazard(processing) == false && InstructionStatus[processing].issue > 0 && InstructionStatus[processing].readOperand == 0)
-            InstructionStatus[processing].readOperand = clock;
-        processing++;
-    }
-}
-
-void ExecutionOperand()
-{
-    int clock = InstructionStatus->clock;
-    int latency;
-    int processing = InstructionList->processing;
-    int issueCount = InstructionStatus->issueCount;
-    string op;
-    clock++;
-    while (processing < issueCount){
-        if (InstructionStatus[processing].readOperand > 0 && InstructionStatus[processing].executionOperand == 0){
-            op = InstructionList[processing].instruction;
-            if (op == "ld"){
-                latency = Latencies.ld;
-            }else if (op == "muld"){
-                latency = Latencies.muld;
-            }else if (op == "divd"){
-                latency = Latencies.divd;
-            }else if (op == "subd"){
-                latency = Latencies.subd;
-            }else if (op == "addd"){
-                latency = Latencies.addd;
-            }
-            if (clock == InstructionStatus[processing].readOperand + latency)
-                InstructionStatus[processing].executionOperand = clock;
+        if (CheckHazard(processing) == false && ScoreBoard.InstructionStatus[processing].issue > 0 && ScoreBoard.InstructionStatus[processing].readOperand == 0)
+        {
+            ScoreBoard.InstructionStatus[processing].readOperand = clock;
         }
         processing++;
     }
 }
 
+// Método que executa a instrução.
+void ExecutionOperand()
+{
+    int clock = ScoreBoard.InstructionStatus->clock;
+    int latency;
+    int processing = InstructionList->processing;
+    int issueCount = ScoreBoard.InstructionStatus->issueCount;
+    string op;
+    clock++;
+    while (processing < issueCount)
+    {
+        if (ScoreBoard.InstructionStatus[processing].readOperand > 0 && ScoreBoard.InstructionStatus[processing].executionOperand == 0)
+        {
+            op = InstructionList[processing].instruction;
+            if (op == "ld")
+            {
+                latency = Latencies.ld;
+            }
+            else if (op == "muld")
+            {
+                latency = Latencies.muld;
+            }
+            else if (op == "divd")
+            {
+                latency = Latencies.divd;
+            }
+            else if (op == "subd")
+            {
+                latency = Latencies.subd;
+            }
+            else if (op == "addd")
+            {
+                latency = Latencies.addd;
+            }
+            if (clock == ScoreBoard.InstructionStatus[processing].readOperand + latency)
+                ScoreBoard.InstructionStatus[processing].executionOperand = clock;
+        }
+        processing++;
+    }
+}
+
+// Método que escreve o resultado da instrução.
 void WriteResult()
 {
-    int clock = InstructionStatus->clock;
+    int clock = ScoreBoard.InstructionStatus->clock;
     clock++;
     int processing = InstructionList->processing;
-    int issueCount = InstructionStatus->issueCount;
+    int issueCount = ScoreBoard.InstructionStatus->issueCount;
     bool canFinish = true;
-    while (processing < issueCount){
-        if (InstructionStatus[processing].executionOperand > 0 && InstructionStatus[processing].writeResult == 0){
+    while (processing < issueCount)
+    {
+        if (ScoreBoard.InstructionStatus[processing].executionOperand > 0 && ScoreBoard.InstructionStatus[processing].writeResult == 0)
+        {
             canFinish = true;
-            for (int earlierInstruction = processing; earlierInstruction > 0; earlierInstruction--){
-                if (CheckHazard(earlierInstruction) == true && InstructionStatus[earlierInstruction].readOperand == 0){
+            for (int earlierInstruction = processing; earlierInstruction > 0; earlierInstruction--)
+            {
+                if (CheckHazard(earlierInstruction) == true && ScoreBoard.InstructionStatus[earlierInstruction].readOperand == 0)
+                {
                     canFinish = false;
                     break;
                 }
             }
-            if (canFinish){
-                InstructionStatus->finalizedList.push_back(processing);
-                InstructionStatus[processing].writeResult = clock;
-                InstructionStatus->finalizedCount++;
-                InstructionStatus[processing].functionalUnit = -1;
+            if (canFinish)
+            {
+                ScoreBoard.InstructionStatus->finalizedList.push_back(processing);
+                ScoreBoard.InstructionStatus[processing].writeResult = clock;
+                ScoreBoard.InstructionStatus->finalizedCount++;
+                ScoreBoard.InstructionStatus[processing].functionalUnit = -1;
             }
         }
         processing++;
     }
 }
 
+// Método que recebe uma instrução, coleta os dados de cada uma e atualiza a estrutura InstructionList.
 void FetchInstructions(string instructionLine)
 {
     string instruction, regDestino, regBase, regBaseLd, regOperando1, regOperando2;
@@ -389,7 +429,6 @@ void FetchInstructions(string instructionLine)
         spaceIndex = instructionLine.find(" ", spaceIndex + 1);
         commaIndex = instructionLine.find(",", commaIndex + 1);
         regOperando1 = instructionLine.substr(spaceIndex + 1, commaIndex - spaceIndex - 1);
-
         spaceIndex = instructionLine.find(" ", spaceIndex + 1);
         commaIndex = instructionLine.find(",", commaIndex + 1);
         regOperando2 = instructionLine.substr(spaceIndex + 1, commaIndex - spaceIndex);
@@ -404,33 +443,27 @@ void FetchInstructions(string instructionLine)
     InstructionList->count++;
 }
 
-void ReadFile(string dir)
+// Método que inicia o ScoreBoard e gera o arquivo de saída.
+void InitScoreBoard(string fileName)
 {
-    ifstream instructionFile;
-    string line;
-    instructionFile.open(dir);
-    if (!instructionFile)
-    {
-        cerr << "Nao foi possivel abrir o arquivo de texto." << endl;
-        exit(1);
-    }
-
-    while (getline(instructionFile, line))
-    {
-        FetchInstructions(line);
-    }
-    freopen("output.txt","w",stdout);
-    while (InstructionStatus->finalizedCount != InstructionList->count)
+    string outputFile;
+    fileName = fileName.replace(0, 2, "");
+    int dotIndex = fileName.find(".");
+    fileName = fileName.substr(0, dotIndex);
+    fileName = fileName + ".out";
+    freopen(fileName.c_str(), "w", stdout);
+    while (ScoreBoard.InstructionStatus->finalizedCount != InstructionList->count)
     {
         WriteResult();
         ExecutionOperand();
         ReadOperand();
         Issue();
-        int finalizedSize = InstructionStatus->finalizedList.size();
-        for (int i = finalizedSize; i > 0; i--){
-            int finalized = InstructionStatus->finalizedList[i - 1];
-            InstructionStatus->finalizedList.pop_back();
-            ClearFunctionalUnit(FunctionalUnitStatus[finalized].functionalUnit);
+        int finalizedSize = ScoreBoard.InstructionStatus->finalizedList.size();
+        for (int i = finalizedSize; i > 0; i--)
+        {
+            int finalized = ScoreBoard.InstructionStatus->finalizedList[i - 1];
+            ScoreBoard.InstructionStatus->finalizedList.pop_back();
+            ClearFunctionalUnit(ScoreBoard.FunctionalUnitStatus[finalized].functionalUnit);
         }
         PrintInstructionStatus();
         cout << endl;
@@ -438,14 +471,34 @@ void ReadFile(string dir)
         cout << endl;
         PrintRegisterStatus();
         cout << endl;
-        InstructionStatus->clock++;
-        cout << "Clock: " << InstructionStatus->clock << endl;
+        ScoreBoard.InstructionStatus->clock++;
+        cout << "Clock: " << ScoreBoard.InstructionStatus->clock << endl;
         cout << endl;
     }
 }
 
-int main()
+// Método que lê o arquivo.
+void ReadFile(string fileName)
 {
-    ReadFile("./entrada2.txt");
+    ifstream instructionFile;
+    string line;
+    instructionFile.open(fileName);
+    if (!instructionFile)
+    {
+        cerr << "Nao foi possivel abrir o arquivo. Verifique se esta na mesma pasta." << endl;
+        exit(1);
+    }
+
+    while (getline(instructionFile, line))
+    {
+        FetchInstructions(line);
+    }
+    InitScoreBoard(fileName);
+}
+
+int main(int argc, char **argv)
+{
+    string fileName = argv[1];
+    ReadFile("./" + fileName);
     return 0;
 }
